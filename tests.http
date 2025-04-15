@@ -1,0 +1,70 @@
+### Create a user (Juan - consumer)
+POST http://localhost:3000/api/users
+Content-Type: application/json
+
+{
+  "account_id": "juan_id",
+  "name": "Juan",
+  "email": "juan@example.com",
+  "profile_picture": "https://example.com/juan.jpg",
+  "role": "user",
+  "location": "Guadalajara"
+}
+
+### Create a provider (Alfredo)
+POST http://localhost:3000/api/users
+Content-Type: application/json
+
+{
+  "account_id": "alfredo_id",
+  "name": "Alfredo",
+  "email": "alfredo@example.com",
+  "profile_picture": "https://example.com/alfredo.jpg",
+  "role": "provider",
+  "location": "Guadalajara"
+}
+
+### Create a category (Plumbing)
+POST http://localhost:3000/api/categories
+Content-Type: application/json
+
+{
+  "name": "Plumbing",
+  "slug": "plumbing",
+  "image": "https://example.com/plumbing.jpg",
+  "description": "All plumbing related services"
+}
+
+### Get all categories
+GET http://localhost:3000/api/categories
+
+### Create a review for Alfredo (by Juan)
+POST http://localhost:3000/api/reviews
+Content-Type: application/json
+
+{
+  "provider_id": "alfredo_id",
+  "user_id": "juan_id",
+  "rating": 5,
+  "title": "Excellent service",
+  "comment": "Alfredo was professional and fast"
+}
+
+### Create an appointment with Alfredo (by Juan)
+POST http://localhost:3000/api/appointments
+Content-Type: application/json
+
+{
+  "provider_id": "alfredo_id",
+  "user_id": "juan_id",
+  "date": "2025-04-10T15:00:00Z"
+}
+
+### Get appointments for Alfredo (provider)
+GET http://localhost:3000/api/appointments/provider/alfredo_id
+
+### Get appointments for Juan (user)
+GET http://localhost:3000/api/appointments/user/juan_id
+
+### Get Alfredo's profile
+GET http://localhost:3000/api/providers/alfredo_id
