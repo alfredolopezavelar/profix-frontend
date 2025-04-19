@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { mockCategories, mockProviders } from "../dev-data/data";
+import { mockCategories } from "../dev-data/data";
 import SearchIcon from "@mui/icons-material/Search";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import PlumbingIcon from "@mui/icons-material/Plumbing";
@@ -8,9 +8,11 @@ import HandymanIcon from "@mui/icons-material/Handyman";
 import FormatPaintIcon from "@mui/icons-material/FormatPaint";
 import AcUnitIcon from "@mui/icons-material/AcUnit";
 import CleaningServicesIcon from "@mui/icons-material/CleaningServices";
+/*
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import DoneAllIcon from "@mui/icons-material/DoneAll";
+*/
 import { Box, Button, Container, TextField, Typography } from "@mui/material";
 import { Link } from "wouter";
 import CategoryCard from "../components/ui/CategoryCard";
@@ -20,7 +22,7 @@ const HomePage = () => {
 
   // CHANGE THIS FOR THE API CALL
 
-  const providers = mockProviders;
+  //const providers = mockProviders;
   const categories = mockCategories;
 
   const handleSearch = (e: React.FormEvent) => {
