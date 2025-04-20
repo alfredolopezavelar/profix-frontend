@@ -11,12 +11,12 @@ export const mockProviders = [
     {
       id: 1,
       name: "Roberto Mendez",
-      profileImageUrl: "https://images.unsplash.com/photo-1574144113084-b6f450cc5e2c?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+      profileImUrl: "https://images.unsplash.com/photo-1574144113084-b6f450cc5e2c?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
       categoryId: 1,
       category: "Plumbing",
       description: "Professional plumber with 12+ years of experience in residential and commercial repairs.",
       hourlyRate: 40,
-      rating: 4.9,
+      rating: 3,
       reviewsCount: 48,
       location: "Zapopan, Jalisco",
       experience: "12+ years experience",
@@ -33,7 +33,7 @@ export const mockProviders = [
     {
       id: 2,
       name: "Ana Gutiérrez",
-      profileImageUrl: "https://images.unsplash.com/photo-1625244724120-1fd1d34d00f6?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+      profileImgUrl: "https://images.unsplash.com/photo-1625244724120-1fd1d34d00f6?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
       categoryId: 2,
       category: "Electrical",
       description: "Certified electrician specializing in modern electrical systems and smart home installations.",
@@ -52,7 +52,7 @@ export const mockProviders = [
     {
       id: 3,
       name: "Miguel Hernández",
-      profileImageUrl: "https://images.unsplash.com/photo-1615529328331-f8917597711f?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+      profileImgUrl: "https://images.unsplash.com/photo-1615529328331-f8917597711f?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
       categoryId: 3,
       category: "Carpentry",
       description: "Master craftsman with expertise in custom furniture, cabinetry, and architectural woodwork.",
@@ -71,7 +71,7 @@ export const mockProviders = [
     {
       id: 4,
       name: "Carlos Vega",
-      profileImageUrl: "https://images.unsplash.com/photo-1590479773265-7464e5d48118?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+      profileImgUrl: "https://images.unsplash.com/photo-1590479773265-7464e5d48118?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
       categoryId: 4,
       category: "Painting",
       description: "Skilled house painter offering interior and exterior painting services with premium materials.",
