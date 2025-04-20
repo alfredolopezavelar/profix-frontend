@@ -16,7 +16,6 @@ import { Link } from "wouter";
 const pages = [
   { name: "Inicio", path: "/" },
   { name: "Encuentra un Proveedor", path: "/search" },
-  { name: "Nosotros", path: "/about" },
 ];
 
 const Navbar = () => {
