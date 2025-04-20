@@ -17,3 +17,32 @@ export interface IAuthState {
     isLoading: boolean,
     error: string | null,
 }
+
+export interface IProvider {
+    id: string,
+    name: string,
+    email?: string,
+    profileImgUrl?: string,
+    coverImageUrl?: string,
+    category: string,
+    categoryId: string,
+    description: string,
+    hourlyRate: string,
+    rating: number,
+    rewiewsCount: string,
+    location: string,
+    experience: string,
+    works: string[],
+}
+
+
+export interface IShortProvider {
+    id: string,
+    name: string,
+    profileImgUrl?: string,
+    category: string,
+    description: string,
+    hourlyRate: string,
+    rating: number,
+    location: string,
+}
