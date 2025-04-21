@@ -98,9 +98,9 @@ const SearchPage = () => {
         >
           <TextField
             sx={{ flex: 3 }}
-            label="Search"
+            label="Buscar"
             variant="outlined"
-            placeholder="Search for providers or services..."
+            placeholder="Busca por servicio o proveedor"
             value={filter.query}
             onChange={handleSearchChange}
             InputProps={{
@@ -111,15 +111,15 @@ const SearchPage = () => {
           />
 
           <FormControl sx={{ flex: 1, width: { xs: "100%", md: "auto" } }}>
-            <InputLabel id="category-select-label">Category</InputLabel>
+            <InputLabel id="category-select-label">Categoría</InputLabel>
             <Select
               labelId="category-select-label"
               id="category-select"
               value={filter.category !== undefined ? filter.category : ""}
-              label="Category"
+              label="Categoría"
               onChange={handleCategoryChange}
             >
-              <MenuItem value="">All Categories</MenuItem>
+              <MenuItem value="">Todas la categoría</MenuItem>
               {categories.map((category) => (
                 <MenuItem key={category.id} value={category.name}>
                   {category.name}
@@ -129,18 +129,20 @@ const SearchPage = () => {
           </FormControl>
 
           <FormControl sx={{ flex: 1, width: { xs: "100%", md: "auto" } }}>
-            <InputLabel id="rating-select-label">Minimum Rating</InputLabel>
+            <InputLabel id="rating-select-label">
+              Minímo de estrellas
+            </InputLabel>
             <Select
               labelId="rating-select-label"
               id="rating-select"
               value={filter.minRating?.toString() || ""}
-              label="Minimum Rating"
+              label="Mínimo de estrellas"
               onChange={handleRatingChange}
             >
-              <MenuItem value="">Any Rating</MenuItem>
-              <MenuItem value="5">5 Stars</MenuItem>
-              <MenuItem value="4">4+ Stars</MenuItem>
-              <MenuItem value="3">3+ Stars</MenuItem>
+              <MenuItem value="">Todos</MenuItem>
+              <MenuItem value="5">5 Estrellas</MenuItem>
+              <MenuItem value="4">4+ Estrellas</MenuItem>
+              <MenuItem value="3">3+ Estrellas</MenuItem>
             </Select>
           </FormControl>
         </Box>
@@ -164,7 +166,6 @@ const SearchPage = () => {
                   filter.sortBy === "price" ? "rgba(0, 0, 0, 0.05)" : undefined,
                 borderColor: "rgba(0, 0, 0, 0.12)",
                 color: "text.primary",
-                fontFamily: "sans-serif",
                 fontSize: "14px",
               }}
             >
@@ -182,7 +183,6 @@ const SearchPage = () => {
                     : undefined,
                 borderColor: "rgba(0, 0, 0, 0.12)",
                 color: "text.primary",
-                fontFamily: "sans-serif",
                 fontSize: "14px",
               }}
             >
@@ -199,10 +199,10 @@ const SearchPage = () => {
         ) : providers.length === 0 ? (
           <Box sx={{ textAlign: "center", py: 6 }}>
             <Typography variant="h6" color="text.secondary" gutterBottom>
-              No providers found
+              No se encontraron proveedores
             </Typography>
             <Typography variant="body2" color="text.secondary">
-              Try adjusting your search filters
+              Ajusta los filtros
             </Typography>
           </Box>
         ) : (
