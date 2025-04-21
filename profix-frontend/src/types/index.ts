@@ -1,16 +1,52 @@
-// Interfaces for the app 
+// Interfaces for the app based on db schema
 
 // Authentication 
 
-export interface IUser {
-    id: number,
+// Categories of the app
+export interface ICategory {
+    id: string,
     name: string,
-    email: string,
-    profileImageUrl: string,
-    isProvider: boolean;
-    providerId?: number;
+    slug: string,
+    coverPhotoURL: string,
+    description: string,
+    numberProviders: number,
 }
 
+// Jobs that a provider could have
+export interface IProviderJobs {
+    imageURL: string | null,
+    title: string,
+    description: string,
+    date: Date,
+}
+
+
+// Information of a user if it is a provider
+export interface IProviderData {
+    category: string, //Id of the category that it belongs
+    categoryName: string,
+    description: string,
+    location: string,
+    coverPhotoURL: string | null,
+    hourlyRate: number | null,
+    stars: number, 
+    advertiser: boolean,
+    balance: number,
+    jobs: IProviderJobs[],
+}
+
+// Interface of a user
+export interface IUser {
+    id: string,
+    username: string,
+    email: string | null,
+    name: string,
+    profilePhotoURL: string | null,
+    isProvider: boolean;
+    providerData: IProviderData | null;
+}
+
+// Authentication 
 export interface IAuthState {
     user: IUser | null,
     isAuthenticated: boolean,
@@ -18,31 +54,21 @@ export interface IAuthState {
     error: string | null,
 }
 
-export interface IProvider {
-    id: string,
+
+// Necesary information for cards
+export interface IShortProvider {
     name: string,
-    email?: string,
-    profileImgUrl?: string,
-    coverImageUrl?: string,
-    category: string,
-    categoryId: string,
+    coverPhotoURL?: string,
+    categoryName: string,
     description: string,
     hourlyRate: string,
-    rating: number,
-    rewiewsCount: string,
+    stars: number,
     location: string,
-    experience: string,
-    works: string[],
 }
 
-
-export interface IShortProvider {
-    id: string,
-    name: string,
-    profileImgUrl?: string,
-    category: string,
-    description: string,
-    hourlyRate: string,
-    rating: number,
-    location: string,
+export interface ISearchFilter {
+    query: string,
+    category?: string,
+    minRating?: number,
+    sortBy?: 'price'| 'rating'
 }
