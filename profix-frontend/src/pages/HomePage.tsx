@@ -235,6 +235,7 @@ const HomePage = () => {
                   <ProviderCard
                     provider={item.providerData}
                     providerId={item.id}
+                    userName={item.name}
                   />
                 )}
               </Box>

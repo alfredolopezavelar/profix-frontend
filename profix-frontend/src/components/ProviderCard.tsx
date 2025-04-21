@@ -9,16 +9,22 @@ import {
   Rating,
 } from "@mui/material";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
-import { IShortProvider } from "../types";
+import { IProviderData, IShortProvider } from "../types";
 import { Link } from "wouter";
 
 interface Props {
-  provider: IShortProvider;
+  provider: IShortProvider | IProviderData;
   width?: string;
   providerId: string;
+  userName: string;
 }
 
-export const ProviderCard = ({ provider, width, providerId }: Props) => {
+export const ProviderCard = ({
+  provider,
+  width,
+  providerId,
+  userName,
+}: Props) => {
   return (
     <Card
       sx={{
@@ -44,7 +50,7 @@ export const ProviderCard = ({ provider, width, providerId }: Props) => {
               ? provider.coverPhotoURL
               : "https://images.unsplash.com/photo-1567954970774-58d6aa6c50dc?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
           }
-          alt={`${provider.name} profile image`}
+          alt={`${userName} profile image`}
         />
         <Box
           sx={{
@@ -78,7 +84,7 @@ export const ProviderCard = ({ provider, width, providerId }: Props) => {
         <Box sx={{ display: "flex", justifyContent: "space-between", mb: 1 }}>
           <Box>
             <Typography variant="h6" component="h3" sx={{ fontWeight: "bold" }}>
-              {provider.name}
+              {userName}
             </Typography>
             <Typography variant="body2" color="text.secondary">
               {provider.categoryName}
