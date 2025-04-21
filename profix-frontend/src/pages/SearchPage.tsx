@@ -1,9 +1,10 @@
 import { ChangeEvent, useState } from "react";
-import { ISearchFilter } from "../types";
+import { IProviderData, ISearchFilter } from "../types";
 import { useLocation } from "wouter";
 import { mockCategories, mockProviders } from "../dev-data/data";
 import {
   Box,
+  Button,
   Container,
   FormControl,
   InputLabel,
@@ -14,6 +15,7 @@ import {
   Typography,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
+import { ProviderCard } from "../components/ProviderCard";
 
 const SearchPage = () => {
   const [location] = useLocation();
@@ -34,6 +36,7 @@ const SearchPage = () => {
 
   const providers = mockProviders;
   const categories = mockCategories;
+  const isLoading = false;
 
   const handleSearchChange = (item: ChangeEvent<HTMLInputElement>) => {
     setFilter((prev) => ({ ...prev, query: item.target.value }));
@@ -53,6 +56,11 @@ const SearchPage = () => {
       ...prev,
       minRating: val ? Number(val) : undefined,
     }));
+  };
+
+  const handleSortChange = (sortBy: "price" | "rating") => {
+    setFilter((prev) => ({ ...prev, sortBy }));
+    setPage(1);
   };
 
   return (
@@ -140,11 +148,81 @@ const SearchPage = () => {
         <Box
           sx={{
             display: "flex",
+            justifyContent: "space-between",
             alignItems: "center",
-            justifyContent: "flex-start",
-            gap: 3,
+            paddingTop: 3,
           }}
-        ></Box>
+        >
+          <Box sx={{ display: "flex", gap: 1 }}>
+            <Button
+              variant={filter.sortBy === "price" ? "contained" : "outlined"}
+              color="inherit"
+              size="small"
+              onClick={() => handleSortChange("price")}
+              sx={{
+                bgcolor:
+                  filter.sortBy === "price" ? "rgba(0, 0, 0, 0.05)" : undefined,
+                borderColor: "rgba(0, 0, 0, 0.12)",
+                color: "text.primary",
+                fontFamily: "sans-serif",
+                fontSize: "14px",
+              }}
+            >
+              Precio: Menor a Mayor
+            </Button>
+            <Button
+              variant={filter.sortBy === "rating" ? "contained" : "outlined"}
+              color="inherit"
+              size="small"
+              onClick={() => handleSortChange("rating")}
+              sx={{
+                bgcolor:
+                  filter.sortBy === "rating"
+                    ? "rgba(0, 0, 0, 0.05)"
+                    : undefined,
+                borderColor: "rgba(0, 0, 0, 0.12)",
+                color: "text.primary",
+                fontFamily: "sans-serif",
+                fontSize: "14px",
+              }}
+            >
+              Mejor calificación
+            </Button>
+          </Box>
+        </Box>
+      </Box>
+
+      {/* Provider Results */}
+      <Box sx={{ mb: 4 }}>
+        {isLoading ? (
+          <Typography>Loading providers...</Typography>
+        ) : providers.length === 0 ? (
+          <Box sx={{ textAlign: "center", py: 6 }}>
+            <Typography variant="h6" color="text.secondary" gutterBottom>
+              No providers found
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              Try adjusting your search filters
+            </Typography>
+          </Box>
+        ) : (
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              gap: 2,
+            }}
+          >
+            {providers.map((provider) => (
+              <ProviderCard
+                provider={provider.providerData as IProviderData}
+                width="100%"
+                providerId={provider.id}
+                userName={provider.name}
+              />
+            ))}
+          </Box>
+        )}
       </Box>
     </Container>
   );
