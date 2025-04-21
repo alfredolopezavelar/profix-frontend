@@ -1,91 +1,228 @@
-export const mockCategories = [
-    { id: 1, name: "Plumbing", slug: "plumbing", imageUrl: "https://images.unsplash.com/photo-1573689705342-99840c10a8ff?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80", providersCount: 48 },
-    { id: 2, name: "Electrical", slug: "electrical",  imageUrl: "https://images.unsplash.com/photo-1580893246395-52aead8960dc?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80", providersCount: 36 },
-    { id: 3, name: "Carpentry", slug: "carpentery",  imageUrl: "https://images.unsplash.com/photo-1615529328331-f8917597711f?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80", providersCount: 29 },
-    { id: 4, name: "Painting", slug: "painting",  imageUrl: "https://images.unsplash.com/photo-1590479773265-7464e5d48118?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80", providersCount: 41 },
-    { id: 5, name: "HVAC", slug: "hvac",  imageUrl: "https://images.unsplash.com/photo-1565093795280-62e6cf60a622?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80", providersCount: 22 },
-    { id: 6, name: "Cleaning", slug: "cleaning",  imageUrl: "https://images.unsplash.com/photo-1563453392212-326f5e854473?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80", providersCount: 53 }
+import { ICategory } from "../types";
+import { IUser } from "../types";
+
+export const mockCategories: ICategory[] = [
+  {
+    id: "1",
+    name: "Plomería",
+    slug: "plomeria",
+    coverPhotoURL: "https://images.unsplash.com/photo-1573689705342-99840c10a8ff?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+    description: "Experts in pipe systems, fixtures, and water heating.",
+    numberProviders: 48,
+  },
+  {
+    id: "2",
+    name: "Electrica",
+    slug: "electrica",
+    coverPhotoURL: "https://images.unsplash.com/photo-1580893246395-52aead8960dc?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+    description: "Certified professionals for all electrical installations and maintenance.",
+    numberProviders: 36,
+  },
+  {
+    id: "3",
+    name: "Carpintería",
+    slug: "carpinteria",
+    coverPhotoURL: "https://images.unsplash.com/photo-1615529328331-f8917597711f?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+    description: "Skilled carpenters for custom furniture and woodwork.",
+    numberProviders: 29,
+  },
+  {
+    id: "4",
+    name: "Pintores",
+    slug: "pintores",
+    coverPhotoURL: "https://images.unsplash.com/photo-1590479773265-7464e5d48118?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+    description: "Interior and exterior painting with quality finishes.",
+    numberProviders: 41,
+  },
+  {
+    id: "5",
+    name: "HVAC",
+    slug: "hvac",
+    coverPhotoURL: "https://images.unsplash.com/photo-1565093795280-62e6cf60a622?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+    description: "Heating, ventilation and air conditioning services.",
+    numberProviders: 22,
+  },
+  {
+    id: "6",
+    name: "Limpieza",
+    slug: "limpieza",
+    coverPhotoURL: "https://images.unsplash.com/photo-1563453392212-326f5e854473?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+    description: "Professional cleaning for homes, offices and more.",
+    numberProviders: 53,
+  }
 ];
 
-export const mockProviders = [
-    {
-      id: 1,
-      name: "Roberto Mendez",
-      profileImUrl: "https://images.unsplash.com/photo-1574144113084-b6f450cc5e2c?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
-      categoryId: 1,
-      category: "Plumbing",
-      description: "Professional plumber with 12+ years of experience in residential and commercial repairs.",
-      hourlyRate: 40,
-      rating: 3,
-      reviewsCount: 48,
-      location: "Zapopan, Jalisco",
-      experience: "12+ years experience",
-      verified: true,
-      gallery: [
-        "https://images.unsplash.com/photo-1573689705342-99840c10a8ff?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
-        "https://images.unsplash.com/photo-1551133989-6a6512ad3915?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
-        "https://images.unsplash.com/photo-1603969867644-c083acaf1757?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
-        "https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
-        "https://images.unsplash.com/photo-1580038302798-25e687c69e91?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
-        "https://images.unsplash.com/photo-1572231782990-3b75adb4d316?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80"
-      ]
-    },
-    {
-      id: 2,
-      name: "Ana Gutiérrez",
-      profileImgUrl: "https://images.unsplash.com/photo-1625244724120-1fd1d34d00f6?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
-      categoryId: 2,
-      category: "Electrical",
-      description: "Certified electrician specializing in modern electrical systems and smart home installations.",
-      hourlyRate: 35,
-      rating: 4.8,
-      reviewsCount: 36,
-      location: "Guadalajara Centro",
-      experience: "8+ years experience",
-      verified: true,
-      gallery: [
-        "https://images.unsplash.com/photo-1587407627257-27b7127c868c?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
-        "https://images.unsplash.com/photo-1512428559087-560fa5ceab42?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
-        "https://images.unsplash.com/photo-1614633836648-fd5897c37aa4?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80"
-      ]
-    },
-    {
-      id: 3,
-      name: "Miguel Hernández",
-      profileImgUrl: "https://images.unsplash.com/photo-1615529328331-f8917597711f?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
-      categoryId: 3,
-      category: "Carpentry",
-      description: "Master craftsman with expertise in custom furniture, cabinetry, and architectural woodwork.",
-      hourlyRate: 45,
-      rating: 5.0,
-      reviewsCount: 29,
-      location: "Tlaquepaque",
-      experience: "15+ years experience",
-      verified: true,
-      gallery: [
-        "https://images.unsplash.com/photo-1617850687395-620757feb1f3?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
-        "https://images.unsplash.com/photo-1618075801985-c9b4799d7e3b?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
-        "https://images.unsplash.com/photo-1582731098031-5a85109016ad?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80"
-      ]
-    },
-    {
-      id: 4,
-      name: "Carlos Vega",
-      profileImgUrl: "https://images.unsplash.com/photo-1590479773265-7464e5d48118?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
-      categoryId: 4,
-      category: "Painting",
-      description: "Skilled house painter offering interior and exterior painting services with premium materials.",
+
+export const mockProviders: IUser[] = [
+  {
+    id: "u1",
+    username: "carlos_mtz",
+    email: "carlos.plumber@example.com",
+    name: "Carlos Martínez",
+    profilePhotoURL: "https://images.unsplash.com/photo-1603415526960-f7e0328d821e?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+    isProvider: true,
+    providerData: {
+      category: "1",
+      categoryName: "Plomería",
+      description: "Plomero con 10 años de experiencia en sistemas residenciales y comerciales.",
+      coverPhotoURL: "https://plus.unsplash.com/premium_photo-1663045495725-89f23b57cfc5?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cGx1bWJlcnxlbnwwfHwwfHx8MA%3D%3D",
+      stars: 4.8,
+      advertiser: true,
+      balance: 950.50,
       hourlyRate: 30,
-      rating: 4.7,
-      reviewsCount: 41,
-      location: "Tonalá, Jalisco",
-      experience: "10+ years experience",
-      verified: true,
-      gallery: [
-        "https://images.unsplash.com/photo-1562259929-b4e1fd3aef09?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
-        "https://images.unsplash.com/photo-1595883032530-7ad3c4c88452?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
-        "https://images.unsplash.com/photo-1591768779171-5ee07c3708ef?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80"
-      ]
-    }
-  ];
+      location: 'Tonalá, Jal',
+      jobs: [
+        {
+          imageURL: "https://images.unsplash.com/photo-1597006092649-92a64981c159?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+          title: "Reparación de fuga en cocina",
+          description: "Se reemplazaron tuberías de cobre en cocina por PVC de alta presión.",
+          date: new Date("2024-12-10"),
+        },
+        {
+          imageURL: null,
+          title: "Instalación de calentador solar",
+          description: "Instalación completa de calentador y conexiones sanitarias.",
+          date: new Date("2025-03-02"),
+        },
+      ],
+    },
+  },
+  {
+    id: "u2",
+    username: "lucia_fdz",
+    email: "lucia.electric@example.com",
+    name: "Lucía Fernández",
+    profilePhotoURL: "https://plus.unsplash.com/premium_photo-1661911309991-cc81afcce97d?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8RWxlY3RyaWNpc3RhfGVufDB8fDB8fHww",
+    isProvider: true,
+    providerData: {
+      category: "2",
+      categoryName: "Electricidad",
+      description: "Electricista certificada, especializada en instalaciones modernas.",
+      coverPhotoURL: "https://plus.unsplash.com/premium_photo-1661911309991-cc81afcce97d?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8RWxlY3RyaWNpc3RhfGVufDB8fDB8fHww",
+      stars: 4.6,
+      advertiser: false,
+      balance: 430.75,
+      hourlyRate: 30,
+      location: 'Guadalajara, Jal',
+      jobs: [
+        {
+          imageURL: "https://images.unsplash.com/photo-1598831060990-cb1a31fd0383?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+          title: "Instalación de paneles solares",
+          description: "Montaje e instalación eléctrica para sistema solar residencial.",
+          date: new Date("2025-01-22"),
+        },
+      ],
+    },
+  },
+  {
+    id: "u3",
+    username: "jorge_rz",
+    email: "jorge.carpentry@example.com",
+    name: "Jorge Ramírez",
+    profilePhotoURL: "https://images.unsplash.com/photo-1600052568605-15be20c2e4b2?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+    isProvider: true,
+    providerData: {
+      category: "3",
+      categoryName: "Carpintería",
+      description: "Muebles personalizados y restauración de madera fina.",
+      coverPhotoURL: "https://images.unsplash.com/photo-1626081063434-79a2169791b1?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8Y2FycGludGVyaWF8ZW58MHx8MHx8fDA%3D",
+      stars: 4.9,
+      advertiser: true,
+      balance: 1200,
+      hourlyRate: 20,
+      location: 'Tlajomulco, Jal',
+      jobs: [
+        {
+          imageURL: "https://images.unsplash.com/photo-1574169208507-8437616485d8?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+          title: "Diseño de comedor de parota",
+          description: "Mesa y sillas personalizadas para comedor de 6 personas.",
+          date: new Date("2025-02-10"),
+        },
+      ],
+    },
+  },
+  {
+    id: "u4",
+    username: "sofia_lp",
+    email: "sofia.painting@example.com",
+    name: "Sofía López",
+    profilePhotoURL: "https://images.unsplash.com/photo-1520975867593-3b692926d270?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+    isProvider: true,
+    providerData: {
+      category: "4",
+      categoryName: "Pintura",
+      description: "Acabados de alta calidad para interiores y exteriores.",
+      coverPhotoURL: "https://plus.unsplash.com/premium_photo-1683121602687-60c47b2222f0?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8cGludG9yJTIwZGUlMjBjYXNhc3xlbnwwfHwwfHx8MA%3D%3D",
+      stars: 4.7,
+      advertiser: false,
+      balance: 689.3,
+      hourlyRate: 50,
+      location: 'Gdl, Jal',
+      jobs: [
+        {
+          imageURL: null,
+          title: "Pintura mural artística",
+          description: "Mural personalizado para cafetería.",
+          date: new Date("2025-01-10"),
+        },
+      ],
+    },
+  },
+  {
+    id: "u5",
+    username: "andres_hvac",
+    email: "andres.hvac@example.com",
+    name: "Andrés Herrera",
+    profilePhotoURL: "https://images.unsplash.com/photo-1595152772835-219674b2a8a6?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+    isProvider: true,
+    providerData: {
+      category: "5",
+      categoryName: "HVAC",
+      description: "Climatización eficiente para hogares y negocios.",
+      coverPhotoURL: "https://plus.unsplash.com/premium_photo-1682126012378-859ca7a9f4cf?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8YWlyZSUyMGFjb25kaWNhbmRvfGVufDB8fDB8fHww",
+      stars: 4.5,
+      advertiser: true,
+      balance: 300,
+      hourlyRate: 20,
+      location: 'Tlaquepaque, Jal',
+      jobs: [
+        {
+          imageURL: "https://images.unsplash.com/photo-1600891964599-f61ba0e24092?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+          title: "Instalación de minisplit",
+          description: "Minisplit inverter para recámara principal.",
+          date: new Date("2025-03-15"),
+        },
+      ],
+    },
+  },
+  {
+    id: "u6",
+    username: "dani_ruiz",
+    email: "daniela.cleaning@example.com",
+    name: "Daniela Ruiz",
+    profilePhotoURL: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+    isProvider: true,
+    providerData: {
+      category: "6",
+      categoryName: "Limpieza",
+      description: "Limpieza profunda y desinfección profesional.",
+      coverPhotoURL: "https://plus.unsplash.com/premium_photo-1663047397245-2ddad26c5dd7?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8Y2xlYW5pbmclMjBzZXJ2aWNlfGVufDB8fDB8fHww",
+      stars: 5.0,
+      advertiser: true,
+      balance: 780,
+      hourlyRate: 30,
+      location: 'Zapopan, Jal',
+      jobs: [
+        {
+          imageURL: null,
+          title: "Limpieza post-evento",
+          description: "Servicio de limpieza para salón de fiestas después de boda.",
+          date: new Date("2025-04-01"),
+        },
+      ],
+    },
+  },
+  // Puedes copiar y ajustar más proveedores si necesitas más de 6. ¿Te genero los 4 restantes?
+];
+  
 
