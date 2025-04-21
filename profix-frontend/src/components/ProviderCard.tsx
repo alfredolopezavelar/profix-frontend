@@ -15,9 +15,10 @@ import { Link } from "wouter";
 interface Props {
   provider: IShortProvider;
   width?: string;
+  providerId: string;
 }
 
-export const ProviderCard = ({ provider, width }: Props) => {
+export const ProviderCard = ({ provider, width, providerId }: Props) => {
   return (
     <Card
       sx={{
@@ -39,8 +40,8 @@ export const ProviderCard = ({ provider, width }: Props) => {
           component="img"
           height="160"
           image={
-            provider.profileImgUrl
-              ? provider.profileImgUrl
+            provider.coverPhotoURL
+              ? provider.coverPhotoURL
               : "https://images.unsplash.com/photo-1567954970774-58d6aa6c50dc?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
           }
           alt={`${provider.name} profile image`}
@@ -60,10 +61,10 @@ export const ProviderCard = ({ provider, width }: Props) => {
           }}
         >
           <Typography variant="body2" fontWeight="medium" sx={{ mr: 0.5 }}>
-            {provider.rating.toFixed(1)}
+            {provider.stars.toFixed(1)}
           </Typography>
           <Rating
-            value={provider.rating}
+            value={provider.stars}
             readOnly
             size="small"
             precision={0.5}
@@ -80,7 +81,7 @@ export const ProviderCard = ({ provider, width }: Props) => {
               {provider.name}
             </Typography>
             <Typography variant="body2" color="text.secondary">
-              {provider.category}
+              {provider.categoryName}
             </Typography>
           </Box>
           <Chip
@@ -112,7 +113,7 @@ export const ProviderCard = ({ provider, width }: Props) => {
 
         <Button
           component={Link}
-          to={`/providers/${provider.id}`}
+          to={`/providers/${providerId}`}
           variant="contained"
           color="info"
           fullWidth
