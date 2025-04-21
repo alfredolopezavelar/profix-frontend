@@ -38,17 +38,17 @@ const HomePage = () => {
     const iconProps = { sx: { fontSize: 40, color: "#00B3B3" } };
 
     switch (categoryName.toLowerCase()) {
-      case "plumbing":
+      case "plomeria":
         return <PlumbingIcon {...iconProps} />;
-      case "electrical":
+      case "electrica":
         return <ElectricalServicesIcon {...iconProps} />;
-      case "carpentry":
+      case "carpinteria":
         return <HandymanIcon {...iconProps} />;
-      case "painting":
+      case "pintores":
         return <FormatPaintIcon {...iconProps} />;
       case "hvac":
         return <AcUnitIcon {...iconProps} />;
-      case "cleaning":
+      case "limpieza":
         return <CleaningServicesIcon {...iconProps} />;
       default:
         return <HandymanIcon {...iconProps} />;
@@ -168,7 +168,7 @@ const HomePage = () => {
               key={cat.id}
               icon={getCategoryIcon(cat.slug)}
               name={cat.name}
-              quantity={cat.providersCount}
+              quantity={cat.numberProviders}
             />
           ))}
         </Box>
@@ -232,7 +232,10 @@ const HomePage = () => {
                 {isLoadingProv ? (
                   <SkeletonCard />
                 ) : (
-                  <ProviderCard provider={item} />
+                  <ProviderCard
+                    provider={item.providerData}
+                    providerId={item.id}
+                  />
                 )}
               </Box>
             )
