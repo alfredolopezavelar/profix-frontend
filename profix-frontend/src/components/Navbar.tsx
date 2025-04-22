@@ -190,7 +190,7 @@ const Navbar = () => {
                 >
                   <MenuItem
                     component={Link}
-                    to="/profile"
+                    to="/my-profile"
                     onClick={handleCloseUserMenu}
                   >
                     <Typography textAlign="center">My Profile</Typography>
@@ -198,7 +198,7 @@ const Navbar = () => {
                   {user?.isProvider && (
                     <MenuItem
                       component={Link}
-                      to={`/edit-profile/${user.id}`}
+                      to={`/edit-profile/${user._id}`}
                       onClick={handleCloseUserMenu}
                     >
                       <Typography textAlign="center">

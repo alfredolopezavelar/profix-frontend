@@ -8,6 +8,7 @@ import Login from "../pages/Login";
 import NotFound from "../pages/NotFound";
 import About from "../pages/About";
 import ProviderLogin from "../pages/ProviderLogin";
+import MyProfile from "../pages/MyProfile";
 
 export const ProtectedRoute = ({
   component: Component,
@@ -32,8 +33,9 @@ export const Router = () => {
       <Route path="/about" component={About} />
       <Route path="provider-login" component={ProviderLogin} />
       <Route path="/providers/:id">
-        {(params) => <ProviderProfile id={Number(params.id)} />}
+        {(params) => <ProviderProfile id={params.id} />}
       </Route>
+      <Route path="my-profile" component={MyProfile}></Route>
       <Route path="/login" component={Login} />
       <Route component={NotFound} />
     </Switch>
