@@ -6,6 +6,7 @@ import {
   ReactNode,
 } from "react";
 import { IUser, IAuthState } from "../types";
+import apiClient from "../services/api-client";
 
 interface AuthContextType extends IAuthState {
   login: (user: string, password: string) => Promise<void>;
@@ -15,7 +16,7 @@ interface AuthContextType extends IAuthState {
 const defaultAuthState: IAuthState = {
   user: null,
   isAuthenticated: false,
-  isLoading: true,
+  isLoading: false,
   error: null,
 };
 
@@ -60,25 +61,43 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   // Implement this function when backend finished
-  const login = async (user: string, password: string) => {
+  const login = async (username: string, password: string) => {
     setAuthState((prev) => ({ ...prev, isLoading: true, error: null }));
 
     try {
-      if (user && password) {
-      }
-    } catch (err) {
+      const res = await apiClient.post("/user/login", {
+        username: username,
+        password: password,
+      });
+
+      const { token, userToReturn } = res.data;
+
+      localStorage.setItem("profix_token", token);
+      localStorage.setItem("profix_user", JSON.stringify(userToReturn));
+
+      setAuthState({
+        user: userToReturn,
+        isAuthenticated: true,
+        isLoading: false,
+        error: null,
+      });
+    } catch (err: any) {
+      const message =
+        err.response?.data?.message || err.message || "Error al iniciar sesión";
       console.error(err);
+      console.error(message);
       setAuthState({
         user: null,
         isAuthenticated: false,
         isLoading: false,
-        error: err instanceof Error ? err.message : "Login Failed",
+        error: message,
       });
     }
   };
 
   const logout = () => {
     localStorage.removeItem("profix_user");
+    localStorage.removeItem("profix_token");
     setAuthState({
       user: null,
       isAuthenticated: false,
