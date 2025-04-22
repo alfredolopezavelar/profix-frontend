@@ -37,7 +37,7 @@ export interface IProviderData {
 
 // Interface of a user
 export interface IUser {
-    id: string,
+    _id: string,
     username: string,
     email: string | null,
     name: string,
