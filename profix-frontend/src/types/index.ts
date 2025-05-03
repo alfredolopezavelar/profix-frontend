@@ -29,6 +29,7 @@ export interface IProviderData {
     location: string,
     coverPhotoURL: string | null,
     hourlyRate: number | null,
+    phoneNumber: string,
     stars: number, 
     advertiser: boolean,
     balance: number,
