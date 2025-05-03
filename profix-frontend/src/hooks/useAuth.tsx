@@ -10,6 +10,12 @@ import apiClient from "../services/api-client";
 
 interface AuthContextType extends IAuthState {
   login: (user: string, password: string) => Promise<void>;
+  register: (
+    user: string,
+    password: string,
+    name: string,
+    email: string
+  ) => Promise<void>;
   logout: () => void;
 }
 
@@ -23,6 +29,7 @@ const defaultAuthState: IAuthState = {
 const AuthContext = createContext<AuthContextType>({
   ...defaultAuthState,
   login: async () => {},
+  register: async () => {},
   logout: () => {},
 });
 
@@ -60,7 +67,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     checkAuthStatus();
   }, []);
 
-  // Implement this function when backend finished
   const login = async (username: string, password: string) => {
     setAuthState((prev) => ({ ...prev, isLoading: true, error: null }));
 
@@ -95,6 +101,37 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  const register = async (
+    username: string,
+    password: string,
+    email: string,
+    name: string
+  ) => {
+    setAuthState((prev) => ({ ...prev, isLoading: true, error: null }));
+
+    try {
+      await apiClient.post("/user/register", {
+        username: username,
+        password: password,
+        email: email,
+        name: name,
+      });
+
+      await login(username, password);
+    } catch (err: any) {
+      const message =
+        err.response?.data?.message || err.message || "Error al Registrarse";
+      console.error(err);
+      console.error(message);
+      setAuthState({
+        user: null,
+        isAuthenticated: false,
+        isLoading: false,
+        error: message,
+      });
+    }
+  };
+
   const logout = () => {
     localStorage.removeItem("profix_user");
     localStorage.removeItem("profix_token");
@@ -111,6 +148,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       value={{
         ...authState,
         login,
+        register,
         logout,
       }}
     >
