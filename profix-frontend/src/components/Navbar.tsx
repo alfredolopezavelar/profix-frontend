@@ -147,17 +147,19 @@ const Navbar = () => {
           </Box>
 
           {/* Become a Provider Button */}
-          <Box sx={{ mr: 2, display: { xs: "none", md: "block" } }}>
-            <Button
-              variant="contained"
-              color="info"
-              sx={{ fontWeight: "medium" }}
-              component={Link}
-              to={"/provider-login"}
-            >
-              Become a Provider
-            </Button>
-          </Box>
+          {user?.isProvider !== true && (
+            <Box sx={{ mr: 2, display: { xs: "none", md: "block" } }}>
+              <Button
+                variant="contained"
+                color="info"
+                sx={{ fontWeight: "medium" }}
+                component={Link}
+                to={"/provider-login"}
+              >
+                Become a Provider
+              </Button>
+            </Box>
+          )}
 
           {/* User Menu */}
           <Box sx={{ flexGrow: 0, display: "flex", alignItems: "center" }}>
@@ -198,7 +200,7 @@ const Navbar = () => {
                   {user?.isProvider && (
                     <MenuItem
                       component={Link}
-                      to={`/edit-profile/${user._id}`}
+                      to={`/edit-provider/`}
                       onClick={handleCloseUserMenu}
                     >
                       <Typography textAlign="center">
