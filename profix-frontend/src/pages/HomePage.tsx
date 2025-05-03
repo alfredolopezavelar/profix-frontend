@@ -81,8 +81,8 @@ const HomePage = () => {
               Encuentra proveedores de servicios en Guadalajara
             </Typography>
             <Typography variant="h6" sx={{ mb: 4 }}>
-              Encuentra electricistas, jardineros, carpinteros y más
-              presatodores de servicio de confianza
+              Encuentra electricistas, jardineros, carpinteros y más prestadores
+              de servicio de confianza
             </Typography>
             <Box
               component="form"
@@ -234,7 +234,7 @@ const HomePage = () => {
                 ) : (
                   <ProviderCard
                     provider={item.providerData}
-                    providerId={item.id}
+                    providerId={item._id}
                     userName={item.name}
                   />
                 )}
