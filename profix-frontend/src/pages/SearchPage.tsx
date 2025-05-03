@@ -217,7 +217,7 @@ const SearchPage = () => {
               <ProviderCard
                 provider={provider.providerData as IProviderData}
                 width="100%"
-                providerId={provider.id}
+                providerId={provider._id}
                 userName={provider.name}
               />
             ))}
