@@ -55,7 +55,7 @@ export const mockCategories: ICategory[] = [
 
 export const mockProviders: IUser[] = [
   {
-    id: "u1",
+    _id: "u1",
     username: "carlos_mtz",
     email: "carlos.plumber@example.com",
     name: "Carlos Martínez",
@@ -70,6 +70,7 @@ export const mockProviders: IUser[] = [
       advertiser: true,
       balance: 950.50,
       hourlyRate: 30,
+      phoneNumber: '33 1234 1234',
       location: 'Tonalá, Jal',
       jobs: [
         {
@@ -88,7 +89,7 @@ export const mockProviders: IUser[] = [
     },
   },
   {
-    id: "u2",
+    _id: "u2",
     username: "lucia_fdz",
     email: "lucia.electric@example.com",
     name: "Lucía Fernández",
@@ -103,6 +104,7 @@ export const mockProviders: IUser[] = [
       advertiser: false,
       balance: 430.75,
       hourlyRate: 30,
+      phoneNumber: '33 1234 1234',
       location: 'Guadalajara, Jal',
       jobs: [
         {
@@ -115,7 +117,7 @@ export const mockProviders: IUser[] = [
     },
   },
   {
-    id: "u3",
+    _id: "u3",
     username: "jorge_rz",
     email: "jorge.carpentry@example.com",
     name: "Jorge Ramírez",
@@ -130,6 +132,7 @@ export const mockProviders: IUser[] = [
       advertiser: true,
       balance: 1200,
       hourlyRate: 20,
+      phoneNumber: '33 1234 1234',
       location: 'Tlajomulco, Jal',
       jobs: [
         {
@@ -142,7 +145,7 @@ export const mockProviders: IUser[] = [
     },
   },
   {
-    id: "u4",
+    _id: "u4",
     username: "sofia_lp",
     email: "sofia.painting@example.com",
     name: "Sofía López",
@@ -157,6 +160,7 @@ export const mockProviders: IUser[] = [
       advertiser: false,
       balance: 689.3,
       hourlyRate: 50,
+      phoneNumber: '33 1234 1234',
       location: 'Gdl, Jal',
       jobs: [
         {
@@ -169,7 +173,7 @@ export const mockProviders: IUser[] = [
     },
   },
   {
-    id: "u5",
+    _id: "u5",
     username: "andres_hvac",
     email: "andres.hvac@example.com",
     name: "Andrés Herrera",
@@ -184,6 +188,7 @@ export const mockProviders: IUser[] = [
       advertiser: true,
       balance: 300,
       hourlyRate: 20,
+      phoneNumber: '33 1234 1234',
       location: 'Tlaquepaque, Jal',
       jobs: [
         {
@@ -196,7 +201,7 @@ export const mockProviders: IUser[] = [
     },
   },
   {
-    id: "u6",
+    _id: "u6",
     username: "dani_ruiz",
     email: "daniela.cleaning@example.com",
     name: "Daniela Ruiz",
@@ -211,6 +216,7 @@ export const mockProviders: IUser[] = [
       advertiser: true,
       balance: 780,
       hourlyRate: 30,
+      phoneNumber: '33 1234 1234',
       location: 'Zapopan, Jal',
       jobs: [
         {
