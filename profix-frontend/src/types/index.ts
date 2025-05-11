@@ -73,3 +73,22 @@ export interface ISearchFilter {
     minRating?: number,
     sortBy?: 'price'| 'rating'
 }
+
+
+export interface IReview {
+    provider: string,
+    user: string,
+    userName: string,
+    stars: number, 
+    title: string,
+    comment: string,
+    date: string,
+}
+
+export interface IAppointment {
+    provider: string, 
+    user: string,
+    day: string,
+    hour: string, 
+    comment: string,
+}

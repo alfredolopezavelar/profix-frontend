@@ -1,4 +1,4 @@
-import { ICategory } from "../types";
+import { ICategory, IReview } from "../types";
 import { IUser } from "../types";
 
 export const mockCategories: ICategory[] = [
@@ -59,7 +59,7 @@ export const mockProviders: IUser[] = [
     username: "carlos_mtz",
     email: "carlos.plumber@example.com",
     name: "Carlos Martínez",
-    profilePhotoURL: "https://images.unsplash.com/photo-1603415526960-f7e0328d821e?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+    profilePhotoURL: "https://images.unsplash.com/photo-1607990281513-2c110a25bd8c?q=80&w=2134&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     isProvider: true,
     providerData: {
       category: "1",
@@ -230,5 +230,54 @@ export const mockProviders: IUser[] = [
   },
   // Puedes copiar y ajustar más proveedores si necesitas más de 6. ¿Te genero los 4 restantes?
 ];
-  
+
+
+
+export const mockReviews : IReview[] = [
+  {
+    provider: "provider-001",
+    user: "user-101",
+    userName: "Ana Martínez",
+    stars: 5,
+    title: "Excelente servicio",
+    comment: "Muy profesional y atento. Sin duda volveré a contratarlo.",
+    date: "2024-10-05",
+  },
+  {
+    provider: "provider-001",
+    user: "user-102",
+    userName: "Luis Gómez",
+    stars: 4,
+    title: "Buena experiencia",
+    comment: "El servicio fue bueno, aunque llegó un poco tarde.",
+    date: "2024-11-12",
+  },
+  {
+    provider: "provider-002",
+    user: "user-103",
+    userName: "Carla Fernández",
+    stars: 3,
+    title: "Regular",
+    comment: "Atención amable, pero el resultado no fue lo que esperaba.",
+    date: "2025-01-20",
+  },
+  {
+    provider: "provider-003",
+    user: "user-104",
+    userName: "Jorge Ramírez",
+    stars: 5,
+    title: "Increíble trabajo",
+    comment: "Me sorprendió la calidad del servicio. Muy recomendable.",
+    date: "2025-03-03",
+  },
+  {
+    provider: "provider-002",
+    user: "user-105",
+    userName: "Valeria Núñez",
+    stars: 2,
+    title: "No fue lo que esperaba",
+    comment: "Poco profesional y el trabajo quedó incompleto.",
+    date: "2025-04-18",
+  },
+]
 
