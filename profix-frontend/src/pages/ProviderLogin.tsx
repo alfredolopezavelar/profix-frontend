@@ -1,5 +1,179 @@
+import { useState } from "react";
+import {
+  Box,
+  Button,
+  Container,
+  Grid,
+  InputAdornment,
+  MenuItem,
+  TextField,
+  Typography,
+} from "@mui/material";
+import PhotoCamera from "@mui/icons-material/PhotoCamera";
+import { useLocation } from "wouter";
+import useAuth from "../hooks/useAuth";
+import useProvider from "../hooks/useProvider";
+import { mockCategories, mockProviders } from "../dev-data/data";
+
 const ProviderLogin = () => {
-  return <h1>Provider Login and Register</h1>;
+  const { isAuthenticated } = useAuth();
+  const { updateProvider, isLoading } = useProvider();
+  const [, navigate] = useLocation();
+
+  // TODO: remplaza mock con consulta real: /providers/me
+  const provider = mockProviders[0];
+
+  const [form, setForm] = useState({
+    businessName: provider.providerData?.businessName ?? "",
+    category: provider.providerData?.categoryName ?? "",
+    description: provider.providerData?.description ?? "",
+    hourlyRate: provider.providerData?.hourlyRate.toString() ?? "",
+    phoneNumber: provider.providerData?.phoneNumber ?? "",
+    city: provider.providerData?.location ?? "",
+    coverPhoto: null as File | null,
+  });
+  const [preview, setPreview] = useState<string | null>(
+    provider.providerData?.coverPhotoURL ?? null
+  );
+  const [error, setError] = useState("");
+
+  const handle = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement>) =>
+    setForm({ ...form, [k]: e.target.value });
+
+  const handlePhoto = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] ?? null;
+    setForm({ ...form, coverPhoto: file });
+    if (file) setPreview(URL.createObjectURL(file));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+    if (!form.businessName || !form.category || !form.hourlyRate) {
+      setError("Completa los campos requeridos (*)");
+      return;
+    }
+    await updateProvider(form);      // POST / PUT a tu backend
+    navigate(`/providers/${provider._id}`);
+  };
+
+  if (!isAuthenticated) {
+    navigate("/login");
+    return null;
+  }
+
+  return (
+    <Container maxWidth="md" sx={{ py: 6 }}>
+      <Typography variant="h4" fontWeight="bold" color="primary" gutterBottom>
+        Editar perfil de proveedor
+      </Typography>
+
+      <Box component="form" onSubmit={handleSubmit}>
+        {error && (
+          <Typography color="error" variant="body2" sx={{ mb: 2 }}>
+            {error}
+          </Typography>
+        )}
+
+        <Grid container spacing={3}>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              label="Nombre del negocio*"
+              fullWidth
+              value={form.businessName}
+              onChange={handle("businessName")}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              label="Categoría*"
+              select
+              fullWidth
+              value={form.category}
+              onChange={handle("category")}
+            >
+              {mockCategories.map((c) => (
+                <MenuItem key={c.id} value={c.name}>
+                  {c.name}
+                </MenuItem>
+              ))}
+            </TextField>
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              label="Descripción"
+              multiline
+              rows={4}
+              fullWidth
+              value={form.description}
+              onChange={handle("description")}
+            />
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <TextField
+              label="Tarifa / hr (MXN)*"
+              type="number"
+              fullWidth
+              value={form.hourlyRate}
+              onChange={handle("hourlyRate")}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">$</InputAdornment>
+                ),
+              }}
+            />
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <TextField
+              label="Teléfono*"
+              fullWidth
+              value={form.phoneNumber}
+              onChange={handle("phoneNumber")}
+            />
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <TextField
+              label="Ciudad*"
+              fullWidth
+              value={form.city}
+              onChange={handle("city")}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <Button
+              component="label"
+              variant="outlined"
+              color="info"
+              startIcon={<PhotoCamera />}
+            >
+              {form.coverPhoto ? "Cambiar portada" : "Subir portada"}
+              <input type="file" accept="image/*" hidden onChange={handlePhoto} />
+            </Button>
+            {preview && (
+              <Box
+                component="img"
+                src={preview}
+                alt="preview"
+                sx={{ width: "100%", mt: 2, borderRadius: 1, maxHeight: 240 }}
+              />
+            )}
+          </Grid>
+        </Grid>
+
+        <Button
+          type="submit"
+          variant="contained"
+          color="info"
+          size="large"
+          fullWidth
+          sx={{ mt: 4 }}
+          disabled={isLoading}
+        >
+          {isLoading ? "Guardando..." : "Guardar cambios"}
+        </Button>
+      </Box>
+    </Container>
+  );
 };
 
 export default ProviderLogin;

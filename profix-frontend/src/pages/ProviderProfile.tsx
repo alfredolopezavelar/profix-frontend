@@ -510,3 +510,19 @@ const ProviderProfile = ({ id }: Props) => {
 };
 
 export default ProviderProfile;
+
+const [openJob, setOpenJob] = useState(false);
+
+// botón (dentro de la sección Trabajos)
+<Button variant="outlined" onClick={() => setOpenJob(true)}>
+  + Nuevo trabajo
+</Button>
+
+<AddJobForm
+  open={openJob}
+  onClose={() => setOpenJob(false)}
+  onSave={async (data) => {
+    await addJobToProvider(data); // POST a tu backend
+    setOpenJob(false);
+  }}
+/>
