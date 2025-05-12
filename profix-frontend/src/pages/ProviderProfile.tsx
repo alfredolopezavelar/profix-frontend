@@ -487,7 +487,7 @@ const ProviderProfile = ({ id }: Props) => {
                         align="center"
                         sx={{ mt: 1 }}
                       >
-                        <Link to="/login">Login</Link> to book an appointment
+                        <Link to="/login">Inicia Sesión</Link> para agendar una cita
                       </Typography>
                     )}
                   </Box>
