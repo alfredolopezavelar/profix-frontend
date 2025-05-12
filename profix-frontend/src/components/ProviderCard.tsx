@@ -67,10 +67,10 @@ export const ProviderCard = ({
           }}
         >
           <Typography variant="body2" fontWeight="medium" sx={{ mr: 0.5 }}>
-            {provider.stars.toFixed(1)}
+            {provider.averageRating.toFixed(1)}
           </Typography>
           <Rating
-            value={provider.stars}
+            value={provider.averageRating}
             readOnly
             size="small"
             precision={0.5}

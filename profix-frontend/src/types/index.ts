@@ -30,7 +30,8 @@ export interface IProviderData {
     coverPhotoURL: string | null,
     hourlyRate: number | null,
     phoneNumber: string,
-    stars: number, 
+    averageRating: number,
+    totalReviews: number, 
     advertiser: boolean,
     balance: number,
     jobs: IProviderJobs[],
@@ -63,7 +64,7 @@ export interface IShortProvider {
     categoryName: string,
     description: string,
     hourlyRate: string,
-    stars: number,
+    averageRating: number,
     location: string,
 }
 

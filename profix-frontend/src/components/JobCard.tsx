@@ -17,7 +17,7 @@ const JobCard = ({ job }: Props) => {
       <CardActionArea>
         <CardMedia
           component="img"
-          height="140"
+          height="160"
           image={job.imageURL !== null ? job.imageURL : undefined}
           alt="Espacio de image"
         />
@@ -33,3 +33,5 @@ const JobCard = ({ job }: Props) => {
     </Card>
   );
 };
+
+export default JobCard;

@@ -9,6 +9,8 @@ import {
   Container,
   Grid,
   Rating,
+  Skeleton,
+  TextField,
   Typography,
 } from "@mui/material";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
@@ -16,6 +18,15 @@ import LocalPhoneRoundedIcon from "@mui/icons-material/LocalPhoneRounded";
 import StarIcon from "@mui/icons-material/Star";
 import AlertDialog from "../components/ui/AlertDialog";
 import SkeletonProfile from "../components/ui/SkeletonProfile";
+import JobCard from "../components/JobCard";
+import ReviewCard from "../components/ReviewCard";
+import Calendar from "../components/Calendar";
+import { Link } from "wouter";
+
+// TODO
+
+// AGREGAR FUNCIÓN PARA HACER FECTH AL BACKEND REVIEWS Y PROVEEDOR
+// AGREGAR FUNCIÓN PARA CARGAR MÁS REVIEWS DE PRINCIPPIO SOLO 3
 
 interface Props {
   id: string;
@@ -32,7 +43,9 @@ const EMPTY_DIALOG = {
   open: false,
 };
 
+// DEVELOPMENT VARIABLES
 const testBool = false;
+const isLoadingAppintment = false;
 
 const ProviderProfile = ({ id }: Props) => {
   const { isAuthenticated, user } = useAuth();
@@ -52,6 +65,7 @@ const ProviderProfile = ({ id }: Props) => {
   const provider = mockProviders[0]; // REPLACE WITH FETCH FUNCTION
 
   // FETCH REVIEWS
+  const isLoadingReviews = false;
   const reviews = mockReviews;
 
   const handleDateTimeSelected = (date: Date, time: string) => {
@@ -204,7 +218,7 @@ const ProviderProfile = ({ id }: Props) => {
                         sx={{ display: "flex", alignItems: "center", mb: 2 }}
                       >
                         <Rating
-                          value={provider.providerData!.stars}
+                          value={provider.providerData!.averageRating}
                           readOnly
                           precision={0.5}
                           emptyIcon={
@@ -220,7 +234,7 @@ const ProviderProfile = ({ id }: Props) => {
                           sx={{ ml: 1 }}
                           color="#90caf9"
                         >
-                          {provider.providerData!.stars.toFixed(1)}
+                          {provider.providerData!.averageRating.toFixed(1)}
                         </Typography>
                       </Box>
                     </Box>
@@ -304,7 +318,7 @@ const ProviderProfile = ({ id }: Props) => {
               <Grid size={{ xl: 12, lg: 8 }}>
                 <Box sx={{ mb: 6 }}>
                   <Typography
-                    variant="h5"
+                    variant="h3"
                     component="h2"
                     fontWeight="bold"
                     color="primary"
@@ -315,6 +329,168 @@ const ProviderProfile = ({ id }: Props) => {
                   <Typography variant="body1">
                     {provider.providerData!.description}
                   </Typography>
+                </Box>
+
+                {/* Job section*/}
+                {provider.providerData &&
+                  provider.providerData.jobs.length > 0 && (
+                    <Box
+                      sx={{ mb: 6, display: "flex", flexDirection: "column" }}
+                    >
+                      <Typography
+                        variant="h4"
+                        component="h2"
+                        fontWeight="bold"
+                        color="primary"
+                        gutterBottom
+                      >
+                        Trabajos
+                      </Typography>
+                      <Grid
+                        container
+                        spacing={2}
+                        justifyContent="center"
+                        sx={{ maxHeight: 500, overflowY: "auto" }}
+                      >
+                        {provider.providerData.jobs.map((job, index) => (
+                          <Grid size={{ xs: 6, md: 4 }} key={index}>
+                            <JobCard job={job}></JobCard>
+                          </Grid>
+                        ))}
+                      </Grid>
+                    </Box>
+                  )}
+
+                {/* REVIEWS SECTION */}
+                <Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      mb: 3,
+                    }}
+                  >
+                    <Typography
+                      variant="h4"
+                      component="h2"
+                      fontWeight="bold"
+                      color="primary"
+                    >
+                      Reseñas
+                    </Typography>
+                    <Box sx={{ display: "flex", alignItems: "center" }}>
+                      <StarIcon sx={{ color: "#007BFF", mr: 0.5 }} />
+                      <Typography
+                        variant="body1"
+                        fontWeight="medium"
+                        component="span"
+                      >
+                        {provider.providerData!.averageRating.toFixed(1)}
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        color="text.secondary"
+                        sx={{ ml: 0.5 }}
+                      >
+                        ({provider.providerData!.totalReviews} reviews)
+                      </Typography>
+                    </Box>
+                  </Box>
+
+                  {isLoadingReviews ? (
+                    [1, 2, 3].map((item) => (
+                      <Skeleton
+                        key={item}
+                        variant="rectangular"
+                        height={100}
+                        sx={{ mb: 2, borderRadius: 1 }}
+                      />
+                    ))
+                  ) : reviews.length === 0 ? (
+                    <Typography
+                      variant="body2"
+                      color="text.secondary"
+                      sx={{ py: 4, textAlign: "center" }}
+                    >
+                      Sin reseñas todavía
+                    </Typography>
+                  ) : (
+                    <Box>
+                      <Box sx={{ maxHeight: 300, overflowY: "auto" }}>
+                        {reviews.map((review, index) => (
+                          <ReviewCard key={index} review={review} />
+                        ))}
+                      </Box>
+                    </Box>
+                  )}
+                </Box>
+              </Grid>
+
+              {/* Booking column */}
+              <Grid size={12}>
+                <Box
+                  sx={{
+                    bgcolor: "rgba(0, 0, 0, 0.02)",
+                    borderRadius: 2,
+                    p: 3,
+                    position: "sticky",
+                    top: 16,
+                  }}
+                >
+                  <Typography
+                    variant="h5"
+                    component="h2"
+                    fontWeight="bold"
+                    color="primary"
+                    gutterBottom
+                  >
+                    Book an Appointment
+                  </Typography>
+                  <Calendar
+                    providerId={id}
+                    onDateTimeSelected={handleDateTimeSelected}
+                  ></Calendar>
+
+                  {/* Booking form */}
+                  <Box component="form" onSubmit={handleBookAppointment}>
+                    <TextField
+                      fullWidth
+                      label="Message (Optional)"
+                      placeholder="Describe your service needs"
+                      value={message}
+                      onChange={(e) => setMessage(e.target.value)}
+                      margin="normal"
+                      multiline
+                      rows={3}
+                    />
+                    <Button
+                      type="submit"
+                      variant="contained"
+                      color="info"
+                      fullWidth
+                      size="large"
+                      sx={{ mt: 3, py: 1.5, fontWeight: "medium" }}
+                      disabled={
+                        !selectedDate ||
+                        !selectedTime ||
+                        !serviceType ||
+                        isLoadingAppintment
+                      }
+                    >
+                      {isLoadingAppintment ? "Booking..." : "Confirm Booking"}
+                    </Button>
+                    {!isAuthenticated && (
+                      <Typography
+                        variant="body2"
+                        color="error"
+                        align="center"
+                        sx={{ mt: 1 }}
+                      >
+                        <Link to="/login">Login</Link> to book an appointment
+                      </Typography>
+                    )}
+                  </Box>
                 </Box>
               </Grid>
             </Grid>
