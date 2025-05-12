@@ -16,45 +16,27 @@ import useAuth from "../hooks/useAuth";
 import useProvider from "../hooks/useProvider";
 import { mockCategories } from "../dev-data/data";
 
-import LoginForm from "../components/LoginForm"; // tu formulario ya existente
 
 const ProviderLogin = () => {
-  const { isAuthenticated, user } = useAuth();
-  const { updateProvider, isLoading } = useProvider();
-  const [, navigate] = useLocation();
 
-  /* ---------- Hooks ---------- */
-  const [form, setForm] = useState({
-    businessName: "",
-    category: "",
-    description: "",
-    hourlyRate: "",
-    phoneNumber: "",
-    city: "",
-    coverPhoto: null as File | null,
-  });
-  const [preview, setPreview] = useState<string | null>(null);
-  const [error, setError] = useState("");
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();}
 
-  /* ---------- manejo de ramificaciones ---------- */
-  if (!isAuthenticated) {
-    // 👉 Usuario sin sesión: muestra LoginForm dentro de esta página
-    return (
-      <Container maxWidth="sm" sx={{ py: 8 }}>
-        <LoginForm />
-      </Container>
-    );
-  }
+    const error = "";
+    const preview = false;
+    const isLoading = false;
 
-  if (user && user.isProvider) {
-    // 👉 Ya es proveedor: llévalo a editar perfil (o dashboard)
-    navigate("/edit-provider");
-    return null;
-  }
+    const [form, setForm] = useState({
+      businessName: "",
+      category: "",
+      description: "",
+      hourlyRate: "",
+      phoneNumber: "",
+      city: "",
+      coverPhoto: null as File | null,
+    });
 
-  /* ---------- Formulario para crear perfil de proveedor ---------- */
-
-  const handle =
+    const handle =
     (k: keyof typeof form) =>
     (e: React.ChangeEvent<HTMLInputElement>) =>
       setForm({ ...form, [k]: e.target.value });
@@ -62,21 +44,6 @@ const ProviderLogin = () => {
   const handlePhoto = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] ?? null;
     setForm({ ...form, coverPhoto: file });
-    if (file) setPreview(URL.createObjectURL(file));
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError("");
-
-    if (!form.businessName || !form.category || !form.hourlyRate) {
-      setError("Completa los campos marcados con *");
-      return;
-    }
-
-    // construye FormData si vas a subir imagen
-    await updateProvider(form); // TODO: sustituir con tu endpoint real
-    navigate(`/providers/${user._id}`);
   };
 
   return (
@@ -162,7 +129,7 @@ const ProviderLogin = () => {
             />
           </Grid>
 
-          <Grid item xs={12}>
+          <Grid size={12}>
             <Button
               component="label"
               variant="outlined"
