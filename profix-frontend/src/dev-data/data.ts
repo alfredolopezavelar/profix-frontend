@@ -258,7 +258,7 @@ export const mockProviders: IUser[] = [
       ],
     },
   },
-  // Puedes copiar y ajustar más proveedores si necesitas más de 6. ¿Te genero los 4 restantes?
+
 ];
 
 

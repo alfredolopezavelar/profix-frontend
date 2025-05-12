@@ -437,6 +437,7 @@ const ProviderProfile = ({ id }: Props) => {
                     position: "sticky",
                     top: 16,
                   }}
+                  id="book-appointment"
                 >
                   <Typography
                     variant="h5"
@@ -445,7 +446,7 @@ const ProviderProfile = ({ id }: Props) => {
                     color="primary"
                     gutterBottom
                   >
-                    Book an Appointment
+                    Agenda una cita
                   </Typography>
                   <Calendar
                     providerId={id}
@@ -456,8 +457,8 @@ const ProviderProfile = ({ id }: Props) => {
                   <Box component="form" onSubmit={handleBookAppointment}>
                     <TextField
                       fullWidth
-                      label="Message (Optional)"
-                      placeholder="Describe your service needs"
+                      label="Mensaje"
+                      placeholder="Describe tus necesidades al proveedor"
                       value={message}
                       onChange={(e) => setMessage(e.target.value)}
                       margin="normal"
@@ -478,7 +479,7 @@ const ProviderProfile = ({ id }: Props) => {
                         isLoadingAppintment
                       }
                     >
-                      {isLoadingAppintment ? "Booking..." : "Confirm Booking"}
+                      {isLoadingAppintment ? "Agendando" : "Cita confirmada"}
                     </Button>
                     {!isAuthenticated && (
                       <Typography
@@ -487,7 +488,8 @@ const ProviderProfile = ({ id }: Props) => {
                         align="center"
                         sx={{ mt: 1 }}
                       >
-                        <Link to="/login">Inicia Sesión</Link> para agendar una cita
+                        <Link to="/login">Inicia Sesión</Link> para agendar una
+                        cita
                       </Typography>
                     )}
                   </Box>
