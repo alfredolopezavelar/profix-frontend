@@ -1,6 +1,4 @@
 import { useState } from "react";
-import useAuth from "../hooks/useAuth";
-import { mockProviders, mockReviews } from "../dev-data/data";
 import {
   Box,
   Button,
@@ -16,58 +14,49 @@ import {
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import LocalPhoneRoundedIcon from "@mui/icons-material/LocalPhoneRounded";
 import StarIcon from "@mui/icons-material/Star";
+import { Link } from "wouter";
+
+import useAuth from "../hooks/useAuth";
+import useProvider from "../hooks/useProvider";
+import { mockProviders, mockReviews } from "../dev-data/data";
+
 import AlertDialog from "../components/ui/AlertDialog";
 import SkeletonProfile from "../components/ui/SkeletonProfile";
 import JobCard from "../components/JobCard";
 import ReviewCard from "../components/ReviewCard";
 import Calendar from "../components/Calendar";
-import { Link } from "wouter";
-
-// TODO
-
-// AGREGAR FUNCIÓN PARA HACER FECTH AL BACKEND REVIEWS Y PROVEEDOR
-// AGREGAR FUNCIÓN PARA CARGAR MÁS REVIEWS DE PRINCIPPIO SOLO 3
+import AddJobForm from "../components/AddJobForm";
 
 interface Props {
-  id: string;
+  id: string; // viene de /providers/:id
 }
 
-interface ProviderProfileProps {
-  id: number;
-}
-
-const EMPTY_DIALOG = {
-  title: "",
-  message: "",
-  btnMessage: undefined,
-  open: false,
-};
-
-// DEVELOPMENT VARIABLES
-const testBool = false;
-const isLoadingAppintment = false;
+const EMPTY_DIALOG = { title: "", message: "", open: false };
 
 const ProviderProfile = ({ id }: Props) => {
   const { isAuthenticated, user } = useAuth();
+  const { addJobToProvider } = useProvider();
 
-  // state for message
+  /* ----------------- estados ----------------- */
   const [dialogData, setDialogData] = useState(EMPTY_DIALOG);
-
-  // states for appointmet booking
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-  const [selectedTime, setSelectedTime] = useState<string>("");
-  const [serviceType, setServiceType] = useState<string>("");
-  const [message, setMessage] = useState<string>("");
+  const [selectedTime, setSelectedTime] = useState("");
+  const [message, setMessage] = useState("");
+  const [openJob, setOpenJob] = useState(false);
 
-  // Fetch provider data
-  // CRETE THIS FUNCTION
+  /* ---------- datos (reemplaza mocks) -------- */
+  const [provider, setProvider] = useState(mockProviders[0]);
+  const [reviews] = useState(mockReviews);
 
-  const provider = mockProviders[0]; // REPLACE WITH FETCH FUNCTION
-
-  // FETCH REVIEWS
   const isLoadingReviews = false;
-  const reviews = mockReviews;
+  const isLoadingAppointment = false;
+  const testBool = false; // skeleton demo
 
+  /* --------- ¿es mi perfil? --------- */
+  const isOwner =
+    isAuthenticated && user?.isProvider && user?._id === provider._id;
+
+  /* --------- handlers --------- */
   const handleDateTimeSelected = (date: Date, time: string) => {
     setSelectedDate(date);
     setSelectedTime(time);
@@ -75,43 +64,52 @@ const ProviderProfile = ({ id }: Props) => {
 
   const handleBookAppointment = (e: React.FormEvent) => {
     e.preventDefault();
-
     if (!isAuthenticated) {
       setDialogData({
         ...dialogData,
-        title: "Inicia Sesión!",
-        message: "Debes de tener un cuenta en Profix para poder agendar citas",
+        title: "Inicia sesión",
+        message: "Necesitas una cuenta para agendar citas.",
         open: true,
       });
       return;
     }
-
-    if (!selectedDate || !selectedTime || !serviceType) {
+    if (!selectedDate || !selectedTime) {
       setDialogData({
         ...dialogData,
-        title: "Formulario incompleto",
-        message: "Llena todos los campos para agendar una cita",
+        title: "Faltan datos",
+        message: "Selecciona fecha y hora.",
         open: true,
       });
-      return;
     }
   };
 
-  const testClick = () => {
-    setDialogData({
-      ...dialogData,
-      open: true,
-      title: "Example works",
-      message: "Example of message working",
-    });
+  const handleSaveJob = async (data: {
+    title: string;
+    description: string;
+    image: File;
+  }) => {
+    // En producción haz POST /providers/:id/jobs
+    const newJob = await addJobToProvider(provider._id, data);
+
+    // Actualiza UI local
+    setProvider((prev: any) => ({
+      ...prev,
+      providerData: {
+        ...prev.providerData,
+        jobs: [newJob, ...prev.providerData.jobs],
+      },
+    }));
+    setOpenJob(false);
   };
 
-  if (testBool) {
-    return <SkeletonProfile />;
-  }
+  /* --------- loading skeleton demo --------- */
+  if (testBool) return <SkeletonProfile />;
+
+  /* ========== UI ========= */
   return (
     <>
       <Container maxWidth="xl" sx={{ py: 6 }}>
+        {/* HEADER con foto de portada */}
         <Box
           sx={{
             bgcolor: "white",
@@ -120,49 +118,30 @@ const ProviderProfile = ({ id }: Props) => {
             boxShadow: 1,
           }}
         >
-          {/* PROVIDER HEADER */}
           <Box
             sx={{
               position: "relative",
+              p: 4,
               bgcolor: provider.providerData?.coverPhotoURL
                 ? "transparent"
-                : "rgba(0, 51, 102, 0.1)",
-              p: 4,
+                : "rgba(0,51,102,0.1)",
               backgroundImage: provider.providerData?.coverPhotoURL
                 ? `url(${provider.providerData.coverPhotoURL})`
                 : "none",
               backgroundSize: "cover",
               backgroundPosition: "center",
               minHeight: 250,
-              barderRadius: 2,
               display: "flex",
               alignItems: "center",
-              overflow: "hidden",
             }}
           >
-            {/* Overlay oscuro */}
             <Box
-              sx={{
-                position: "absolute",
-                inset: 0,
-                bgcolor: "rgba(0, 0, 0, 0.4)", // ajusta opacidad
-                zIndex: 0,
-              }}
+              sx={{ position: "absolute", inset: 0, bgcolor: "rgba(0,0,0,0.4)" }}
             />
-            <Box
-              sx={{
-                position: "relative",
-                zIndex: 1,
-                width: "100%",
-              }}
-            >
-              <Grid
-                container
-                spacing={4}
-                columnSpacing={5}
-                sx={{ paddingX: { xs: 0, md: "45px" } }}
-              >
-                <Grid size={{ xs: 12, md: 3 }}>
+            <Box sx={{ position: "relative", zIndex: 1, width: "100%" }}>
+              <Grid container spacing={4}>
+                {/* avatar */}
+                <Grid item xs={12} md={3}>
                   <Box
                     sx={{
                       width: { xs: 100, md: 175 },
@@ -174,22 +153,15 @@ const ProviderProfile = ({ id }: Props) => {
                     }}
                   >
                     <img
-                      src={
-                        provider.profilePhotoURL
-                          ? provider.profilePhotoURL
-                          : undefined
-                      }
-                      alt={`${provider.name} profile`}
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                        objectFit: "cover",
-                      }}
+                      src={provider.profilePhotoURL}
+                      alt={provider.name}
+                      style={{ width: "100%", height: "100%", objectFit: "cover" }}
                     />
                   </Box>
                 </Grid>
 
-                <Grid size={{ xs: 12, md: 9 }}>
+                {/* info */}
+                <Grid item xs={12} md={9}>
                   <Box
                     sx={{
                       display: "flex",
@@ -198,111 +170,75 @@ const ProviderProfile = ({ id }: Props) => {
                     }}
                   >
                     <Box>
-                      <Typography
-                        variant="h4"
-                        component="h1"
-                        fontWeight="bold"
-                        color="#90caf9"
-                        gutterBottom
-                      >
+                      <Typography variant="h4" fontWeight="bold" color="#90caf9">
                         {provider.name}
                       </Typography>
-                      <Typography
-                        variant="h6"
-                        color="common.white"
-                        gutterBottom
-                      >
-                        {provider.providerData!.categoryName}
+                      <Typography variant="h6" color="common.white">
+                        {provider.providerData.categoryName}
                       </Typography>
-                      <Box
-                        sx={{ display: "flex", alignItems: "center", mb: 2 }}
-                      >
+                      <Box sx={{ display: "flex", alignItems: "center", mt: 1 }}>
                         <Rating
-                          value={provider.providerData!.averageRating}
+                          value={provider.providerData.averageRating}
                           readOnly
                           precision={0.5}
                           emptyIcon={
-                            <StarIcon
-                              style={{ opacity: 0.55 }}
-                              fontSize="inherit"
-                            />
+                            <StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />
                           }
                         />
-                        <Typography
-                          variant="h5"
-                          component="span"
-                          sx={{ ml: 1 }}
-                          color="#90caf9"
-                        >
-                          {provider.providerData!.averageRating.toFixed(1)}
+                        <Typography variant="h5" color="#90caf9" sx={{ ml: 1 }}>
+                          {provider.providerData.averageRating.toFixed(1)}
                         </Typography>
                       </Box>
                     </Box>
 
                     <Box sx={{ mt: { xs: 2, md: 0 } }}>
-                      <Card sx={{ maxWidth: 180, mb: 2, boxShadow: 1 }}>
+                      <Card sx={{ mb: 2, boxShadow: 1 }}>
                         <CardContent sx={{ py: 1, textAlign: "center" }}>
-                          <Typography variant="body2" color="text.secondary">
-                            Costo por hora
-                          </Typography>
-                          <Typography
-                            variant="h5"
-                            color="primary"
-                            fontWeight="bold"
-                          >
-                            ${provider.providerData!.hourlyRate}/hr
+                          <Typography variant="body2">Costo por hora</Typography>
+                          <Typography variant="h5" color="primary" fontWeight="bold">
+                            ${provider.providerData.hourlyRate}/hr
                           </Typography>
                         </CardContent>
                       </Card>
-
                       <Button
                         variant="contained"
                         color="info"
                         fullWidth
-                        onClick={() => {
+                        onClick={() =>
                           document
                             .getElementById("book-appointment")
-                            ?.scrollIntoView({
-                              behavior: "smooth",
-                              block: "start",
-                            });
-                        }}
+                            ?.scrollIntoView({ behavior: "smooth" })
+                        }
                       >
                         Agenda una cita
                       </Button>
                     </Box>
                   </Box>
 
+                  {/* datos rápidos */}
                   <Grid
                     container
                     spacing={3}
                     sx={{
                       mt: 1,
-                      backgroundColor: "rgba(255, 255, 255, 0.7)",
+                      bgcolor: "rgba(255,255,255,0.7)",
                       borderRadius: 2,
                       p: 2,
                     }}
                   >
-                    <Grid size={{ xs: 12, sm: 4 }}>
+                    <Grid item xs={12} sm={4}>
                       <Box sx={{ display: "flex", alignItems: "center" }}>
-                        <LocationOnIcon
-                          fontSize="small"
-                          sx={{ color: "text.secondary", mr: 1 }}
-                        />
-                        <Typography variant="body2" color="text.secondary">
-                          {provider.providerData!.location}
+                        <LocationOnIcon sx={{ mr: 1 }} fontSize="small" />
+                        <Typography variant="body2">
+                          {provider.providerData.location}
                         </Typography>
                       </Box>
                     </Grid>
-
-                    <Grid size={{ xs: 12, sm: 4 }}>
+                    <Grid item xs={12} sm={4}>
                       <Box sx={{ display: "flex", alignItems: "center" }}>
-                        <LocalPhoneRoundedIcon
-                          fontSize="small"
-                          sx={{ color: "text.secondary", mr: 1 }}
-                        />
-                        <Typography variant="body2" color="text.secondary">
-                          {provider.providerData!.phoneNumber}
+                        <LocalPhoneRoundedIcon sx={{ mr: 1 }} fontSize="small" />
+                        <Typography variant="body2">
+                          {provider.providerData.phoneNumber}
                         </Typography>
                       </Box>
                     </Grid>
@@ -312,173 +248,129 @@ const ProviderProfile = ({ id }: Props) => {
             </Box>
           </Box>
 
-          {/* PROVIDER CONTENT */}
+          {/* -------- CONTENIDO -------- */}
           <Box sx={{ p: 4 }}>
             <Grid container spacing={4}>
-              <Grid size={{ xl: 12, lg: 8 }}>
+              {/* Columna principal */}
+              <Grid item lg={8} xl={12}>
+                {/* Acerca de */}
                 <Box sx={{ mb: 6 }}>
-                  <Typography
-                    variant="h3"
-                    component="h2"
-                    fontWeight="bold"
-                    color="primary"
-                    gutterBottom
-                  >
+                  <Typography variant="h3" fontWeight="bold" color="primary">
                     Acerca de
                   </Typography>
-                  <Typography variant="body1">
-                    {provider.providerData!.description}
-                  </Typography>
+                  <Typography>{provider.providerData.description}</Typography>
                 </Box>
 
-                {/* Job section*/}
-                {provider.providerData &&
-                  provider.providerData.jobs.length > 0 && (
-                    <Box
-                      sx={{ mb: 6, display: "flex", flexDirection: "column" }}
-                    >
-                      <Typography
-                        variant="h4"
-                        component="h2"
-                        fontWeight="bold"
-                        color="primary"
-                        gutterBottom
-                      >
-                        Trabajos
-                      </Typography>
-                      <Grid
-                        container
-                        spacing={2}
-                        justifyContent="center"
-                        sx={{ maxHeight: 500, overflowY: "auto" }}
-                      >
-                        {provider.providerData.jobs.map((job, index) => (
-                          <Grid size={{ xs: 6, md: 4 }} key={index}>
-                            <JobCard job={job}></JobCard>
-                          </Grid>
-                        ))}
-                      </Grid>
-                    </Box>
-                  )}
-
-                {/* REVIEWS SECTION */}
-                <Box>
+                {/* Trabajos */}
+                <Box sx={{ mb: 6, display: "flex", flexDirection: "column" }}>
                   <Box
                     sx={{
                       display: "flex",
                       justifyContent: "space-between",
-                      alignItems: "center",
-                      mb: 3,
+                      mb: 2,
                     }}
                   >
-                    <Typography
-                      variant="h4"
-                      component="h2"
-                      fontWeight="bold"
-                      color="primary"
-                    >
-                      Reseñas
+                    <Typography variant="h4" fontWeight="bold" color="primary">
+                      Trabajos
                     </Typography>
-                    <Box sx={{ display: "flex", alignItems: "center" }}>
-                      <StarIcon sx={{ color: "#007BFF", mr: 0.5 }} />
-                      <Typography
-                        variant="body1"
-                        fontWeight="medium"
-                        component="span"
-                      >
-                        {provider.providerData!.averageRating.toFixed(1)}
-                      </Typography>
-                      <Typography
-                        variant="body2"
-                        color="text.secondary"
-                        sx={{ ml: 0.5 }}
-                      >
-                        ({provider.providerData!.totalReviews} reviews)
-                      </Typography>
-                    </Box>
+                    {isOwner && (
+                      <Button variant="outlined" onClick={() => setOpenJob(true)}>
+                        + Nuevo trabajo
+                      </Button>
+                    )}
                   </Box>
 
+                  <Grid
+                    container
+                    spacing={2}
+                    sx={{ maxHeight: 500, overflowY: "auto" }}
+                  >
+                    {provider.providerData?.jobs?.map((job, i) => (
+                      <Grid item xs={6} md={4} key={i}>
+                        <JobCard job={job} />
+                      </Grid>
+                    ))}
+                  </Grid>
+
+                  {/* Modal */}
+                  {isOwner && (
+                    <AddJobForm
+                      open={openJob}
+                      onClose={() => setOpenJob(false)}
+                      onSave={handleSaveJob}
+                    />
+                  )}
+                </Box>
+
+                {/* Reseñas */}
+                <Box>
+                  <Typography variant="h4" fontWeight="bold" color="primary">
+                    Reseñas
+                  </Typography>
                   {isLoadingReviews ? (
-                    [1, 2, 3].map((item) => (
+                    [1, 2, 3].map((k) => (
                       <Skeleton
-                        key={item}
+                        key={k}
                         variant="rectangular"
                         height={100}
                         sx={{ mb: 2, borderRadius: 1 }}
                       />
                     ))
                   ) : reviews.length === 0 ? (
-                    <Typography
-                      variant="body2"
-                      color="text.secondary"
-                      sx={{ py: 4, textAlign: "center" }}
-                    >
+                    <Typography sx={{ py: 4, textAlign: "center" }}>
                       Sin reseñas todavía
                     </Typography>
                   ) : (
-                    <Box>
-                      <Box sx={{ maxHeight: 300, overflowY: "auto" }}>
-                        {reviews.map((review, index) => (
-                          <ReviewCard key={index} review={review} />
-                        ))}
-                      </Box>
+                    <Box sx={{ maxHeight: 300, overflowY: "auto" }}>
+                      {reviews.map((r, i) => (
+                        <ReviewCard key={i} review={r} />
+                      ))}
                     </Box>
                   )}
                 </Box>
               </Grid>
 
-              {/* Booking column */}
-              <Grid size={12}>
+              {/* Columna de reserva */}
+              <Grid item xs={12}>
                 <Box
                   sx={{
-                    bgcolor: "rgba(0, 0, 0, 0.02)",
+                    bgcolor: "rgba(0,0,0,0.02)",
                     borderRadius: 2,
                     p: 3,
-                    position: "sticky",
-                    top: 16,
                   }}
                 >
-                  <Typography
-                    variant="h5"
-                    component="h2"
-                    fontWeight="bold"
-                    color="primary"
-                    gutterBottom
-                  >
-                    Book an Appointment
+                  <Typography variant="h5" fontWeight="bold" color="primary">
+                    Reserva una cita
                   </Typography>
+
                   <Calendar
                     providerId={id}
                     onDateTimeSelected={handleDateTimeSelected}
-                  ></Calendar>
+                  />
 
-                  {/* Booking form */}
-                  <Box component="form" onSubmit={handleBookAppointment}>
+                  <Box
+                    id="book-appointment"
+                    component="form"
+                    onSubmit={handleBookAppointment}
+                  >
                     <TextField
                       fullWidth
-                      label="Message (Optional)"
-                      placeholder="Describe your service needs"
+                      label="Mensaje (opcional)"
+                      multiline
+                      rows={3}
                       value={message}
                       onChange={(e) => setMessage(e.target.value)}
                       margin="normal"
-                      multiline
-                      rows={3}
                     />
                     <Button
                       type="submit"
                       variant="contained"
                       color="info"
                       fullWidth
-                      size="large"
-                      sx={{ mt: 3, py: 1.5, fontWeight: "medium" }}
-                      disabled={
-                        !selectedDate ||
-                        !selectedTime ||
-                        !serviceType ||
-                        isLoadingAppintment
-                      }
+                      sx={{ mt: 3 }}
+                      disabled={isLoadingAppointment}
                     >
-                      {isLoadingAppintment ? "Booking..." : "Confirm Booking"}
+                      Confirmar
                     </Button>
                     {!isAuthenticated && (
                       <Typography
@@ -487,7 +379,7 @@ const ProviderProfile = ({ id }: Props) => {
                         align="center"
                         sx={{ mt: 1 }}
                       >
-                        <Link to="/login">Inicia Sesión</Link> para agendar una cita
+                        <Link to="/login">Inicia sesión</Link> para agendar
                       </Typography>
                     )}
                   </Box>
@@ -498,31 +390,10 @@ const ProviderProfile = ({ id }: Props) => {
         </Box>
       </Container>
 
-      <Button variant="contained" onClick={testClick}>
-        Abrir loading dialog
-      </Button>
-      <AlertDialog
-        {...dialogData}
-        onClose={() => setDialogData(EMPTY_DIALOG)}
-      />
+      {/* diálogos de alerta */}
+      <AlertDialog {...dialogData} onClose={() => setDialogData(EMPTY_DIALOG)} />
     </>
   );
 };
 
 export default ProviderProfile;
-
-const [openJob, setOpenJob] = useState(false);
-
-// botón (dentro de la sección Trabajos)
-<Button variant="outlined" onClick={() => setOpenJob(true)}>
-  + Nuevo trabajo
-</Button>
-
-<AddJobForm
-  open={openJob}
-  onClose={() => setOpenJob(false)}
-  onSave={async (data) => {
-    await addJobToProvider(data); // POST a tu backend
-    setOpenJob(false);
-  }}
-/>

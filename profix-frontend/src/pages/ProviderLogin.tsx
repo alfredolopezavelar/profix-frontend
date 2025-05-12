@@ -11,34 +11,53 @@ import {
 } from "@mui/material";
 import PhotoCamera from "@mui/icons-material/PhotoCamera";
 import { useLocation } from "wouter";
+
 import useAuth from "../hooks/useAuth";
 import useProvider from "../hooks/useProvider";
-import { mockCategories, mockProviders } from "../dev-data/data";
+import { mockCategories } from "../dev-data/data";
+
+import LoginForm from "../components/LoginForm"; // tu formulario ya existente
 
 const ProviderLogin = () => {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
   const { updateProvider, isLoading } = useProvider();
   const [, navigate] = useLocation();
 
-  // TODO: remplaza mock con consulta real: /providers/me
-  const provider = mockProviders[0];
-
+  /* ---------- Hooks ---------- */
   const [form, setForm] = useState({
-    businessName: provider.providerData?.businessName ?? "",
-    category: provider.providerData?.categoryName ?? "",
-    description: provider.providerData?.description ?? "",
-    hourlyRate: provider.providerData?.hourlyRate.toString() ?? "",
-    phoneNumber: provider.providerData?.phoneNumber ?? "",
-    city: provider.providerData?.location ?? "",
+    businessName: "",
+    category: "",
+    description: "",
+    hourlyRate: "",
+    phoneNumber: "",
+    city: "",
     coverPhoto: null as File | null,
   });
-  const [preview, setPreview] = useState<string | null>(
-    provider.providerData?.coverPhotoURL ?? null
-  );
+  const [preview, setPreview] = useState<string | null>(null);
   const [error, setError] = useState("");
 
-  const handle = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement>) =>
-    setForm({ ...form, [k]: e.target.value });
+  /* ---------- manejo de ramificaciones ---------- */
+  if (!isAuthenticated) {
+    // 👉 Usuario sin sesión: muestra LoginForm dentro de esta página
+    return (
+      <Container maxWidth="sm" sx={{ py: 8 }}>
+        <LoginForm />
+      </Container>
+    );
+  }
+
+  if (user && user.isProvider) {
+    // 👉 Ya es proveedor: llévalo a editar perfil (o dashboard)
+    navigate("/edit-provider");
+    return null;
+  }
+
+  /* ---------- Formulario para crear perfil de proveedor ---------- */
+
+  const handle =
+    (k: keyof typeof form) =>
+    (e: React.ChangeEvent<HTMLInputElement>) =>
+      setForm({ ...form, [k]: e.target.value });
 
   const handlePhoto = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] ?? null;
@@ -49,23 +68,21 @@ const ProviderLogin = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+
     if (!form.businessName || !form.category || !form.hourlyRate) {
-      setError("Completa los campos requeridos (*)");
+      setError("Completa los campos marcados con *");
       return;
     }
-    await updateProvider(form);      // POST / PUT a tu backend
-    navigate(`/providers/${provider._id}`);
-  };
 
-  if (!isAuthenticated) {
-    navigate("/login");
-    return null;
-  }
+    // construye FormData si vas a subir imagen
+    await updateProvider(form); // TODO: sustituir con tu endpoint real
+    navigate(`/providers/${user._id}`);
+  };
 
   return (
     <Container maxWidth="md" sx={{ py: 6 }}>
       <Typography variant="h4" fontWeight="bold" color="primary" gutterBottom>
-        Editar perfil de proveedor
+        Crea tu perfil de proveedor
       </Typography>
 
       <Box component="form" onSubmit={handleSubmit}>
@@ -84,6 +101,7 @@ const ProviderLogin = () => {
               onChange={handle("businessName")}
             />
           </Grid>
+
           <Grid item xs={12} sm={6}>
             <TextField
               label="Categoría*"
@@ -99,6 +117,7 @@ const ProviderLogin = () => {
               ))}
             </TextField>
           </Grid>
+
           <Grid item xs={12}>
             <TextField
               label="Descripción"
@@ -109,6 +128,7 @@ const ProviderLogin = () => {
               onChange={handle("description")}
             />
           </Grid>
+
           <Grid item xs={12} sm={4}>
             <TextField
               label="Tarifa / hr (MXN)*"
@@ -123,6 +143,7 @@ const ProviderLogin = () => {
               }}
             />
           </Grid>
+
           <Grid item xs={12} sm={4}>
             <TextField
               label="Teléfono*"
@@ -131,6 +152,7 @@ const ProviderLogin = () => {
               onChange={handle("phoneNumber")}
             />
           </Grid>
+
           <Grid item xs={12} sm={4}>
             <TextField
               label="Ciudad*"
@@ -139,6 +161,7 @@ const ProviderLogin = () => {
               onChange={handle("city")}
             />
           </Grid>
+
           <Grid item xs={12}>
             <Button
               component="label"
@@ -147,14 +170,16 @@ const ProviderLogin = () => {
               startIcon={<PhotoCamera />}
             >
               {form.coverPhoto ? "Cambiar portada" : "Subir portada"}
-              <input type="file" accept="image/*" hidden onChange={handlePhoto} />
+              <input type="file" hidden accept="image/*" onChange={handlePhoto} />
             </Button>
+
             {preview && (
               <Box
+                mt={2}
                 component="img"
                 src={preview}
-                alt="preview"
-                sx={{ width: "100%", mt: 2, borderRadius: 1, maxHeight: 240 }}
+                alt="Portada"
+                sx={{ width: "100%", maxHeight: 240, borderRadius: 1 }}
               />
             )}
           </Grid>
@@ -169,7 +194,7 @@ const ProviderLogin = () => {
           sx={{ mt: 4 }}
           disabled={isLoading}
         >
-          {isLoading ? "Guardando..." : "Guardar cambios"}
+          {isLoading ? "Guardando..." : "Crear perfil"}
         </Button>
       </Box>
     </Container>
